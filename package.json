@@ -1,0 +1,13 @@
+{
+  "name": "servicedesk",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "bun run --cwd apps/web dev",
+    "dev:api": "bun run --cwd apps/api start:dev",
+    "build:shared": "bun run --cwd packages/shared build"
+  }
+}
