@@ -67,7 +67,7 @@ export class SlaService {
 
       const responseDueAt = Date.parse(sla.responseDueAt);
       const resolveDueAt = Date.parse(sla.resolveDueAt);
-      const isBreached = now > responseDueAt || now > resolveDueAt;
+      const isBreached = now >= responseDueAt || now >= resolveDueAt;
 
       sla.checkedAt = new Date(now).toISOString();
 
@@ -79,6 +79,10 @@ export class SlaService {
         this.logger.warn(`SLA breached for ticket ${ticket.id}`);
       }
     }
+  }
+
+  reset(): void {
+    this.ticketSlas.clear();
   }
 
   private shouldCheckStatus(status: TicketStatus): boolean {

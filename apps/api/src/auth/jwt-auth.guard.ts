@@ -8,6 +8,13 @@ export interface AuthenticatedRequest extends Request {
   user?: AuthUserDto;
 }
 
+interface JwtPayload {
+  sub: string;
+  email: string;
+  name: string;
+  role: AuthUserDto['role'];
+}
+
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
@@ -20,7 +27,7 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
       request.user = {
         id: payload.sub,
         email: payload.email,

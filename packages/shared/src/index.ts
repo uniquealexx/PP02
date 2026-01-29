@@ -1,6 +1,6 @@
-export type TicketStatus = "NEW" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
+export type TicketStatus = 'NEW' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
 
-export type UserRole = "USER" | "AGENT" | "ADMIN";
+export type UserRole = 'USER' | 'AGENT' | 'ADMIN';
 
 export interface UserDto {
   id: string;
@@ -77,11 +77,11 @@ export interface TicketSlaDto {
 }
 
 export type AuditEventType =
-  | "TICKET_CREATED"
-  | "SLA_BREACHED"
-  | "TICKET_ASSIGNED"
-  | "COMMENT_ADDED"
-  | "STATUS_CHANGED";
+  | 'TICKET_CREATED'
+  | 'SLA_BREACHED'
+  | 'TICKET_ASSIGNED'
+  | 'COMMENT_ADDED'
+  | 'STATUS_CHANGED';
 
 export interface AuditLogDto {
   id: string;

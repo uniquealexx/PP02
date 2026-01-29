@@ -75,4 +75,8 @@ export class AuditService {
   getLogs(): AuditLogDto[] {
     return [...this.logs];
   }
+
+  reset(): void {
+    this.logs.length = 0;
+  }
 }

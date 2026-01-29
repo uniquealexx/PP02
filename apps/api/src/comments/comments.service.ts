@@ -23,11 +23,7 @@ export class CommentsService {
     return [...(this.commentsByTicket.get(ticketId) ?? [])];
   }
 
-  addComment(
-    ticketId: string,
-    authorId: string,
-    payload: CreateCommentDto,
-  ): CommentDto {
+  addComment(ticketId: string, authorId: string, payload: CreateCommentDto): CommentDto {
     this.ticketsService.getTicketById(ticketId);
 
     const comment: CommentDto = {
@@ -48,5 +44,9 @@ export class CommentsService {
     this.logger.log(`Comment added ${comment.id} for ticket ${ticketId}`);
 
     return comment;
+  }
+
+  reset(): void {
+    this.commentsByTicket.clear();
   }
 }

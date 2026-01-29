@@ -28,9 +28,7 @@ export class AuthService {
     });
   }
 
-  async register(
-    payload: RegisterDto,
-  ): Promise<{ response: AuthResponseDto; token: string }> {
+  async register(payload: RegisterDto): Promise<{ response: AuthResponseDto; token: string }> {
     const existing = await this.prisma.user.findUnique({
       where: { email: payload.email.toLowerCase() },
     });

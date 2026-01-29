@@ -9,8 +9,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
   ApiTags,
@@ -25,6 +27,7 @@ import { CreateTicketRequest } from './dto/create-ticket.request';
 import { UpdateTicketStatusRequest } from './dto/update-ticket-status.request';
 import { TicketsService } from './tickets.service';
 import type { AuthUserDto } from '@servicedesk/shared';
+import { ErrorResponseDto } from '../common/dto/error-response.dto';
 
 @ApiTags('tickets')
 @Controller('tickets')
@@ -37,6 +40,7 @@ export class TicketsController {
 
   @Get()
   @ApiOkResponse({ description: 'List tickets.' })
+  @ApiBadRequestResponse({ type: ErrorResponseDto })
   getTickets(@CurrentUser() user: AuthUserDto): TicketDto[] {
     return this.ticketsService.getTicketsForUser(user);
   }
@@ -44,16 +48,15 @@ export class TicketsController {
   @Post()
   @ApiBody({ type: CreateTicketRequest })
   @ApiCreatedResponse({ description: 'Create ticket.' })
-  createTicket(
-    @CurrentUser() user: AuthUserDto,
-    @Body() body: CreateTicketRequest,
-  ): TicketDto {
+  @ApiBadRequestResponse({ type: ErrorResponseDto })
+  createTicket(@CurrentUser() user: AuthUserDto, @Body() body: CreateTicketRequest): TicketDto {
     return this.ticketsService.createTicket(body, user.id);
   }
 
   @Get(':id/sla')
   @ApiParam({ name: 'id', description: 'Ticket id.' })
   @ApiOkResponse({ description: 'Ticket SLA details.', type: TicketSlaResponse })
+  @ApiNotFoundResponse({ type: ErrorResponseDto })
   getTicketSla(@Param('id') id: string): TicketSlaDto {
     this.ticketsService.getTicketById(id);
     const sla = this.slaService.getTicketSla(id);
@@ -67,10 +70,9 @@ export class TicketsController {
   @ApiParam({ name: 'id', description: 'Ticket id.' })
   @ApiBody({ type: UpdateTicketStatusRequest })
   @ApiOkResponse({ description: 'Update ticket status.' })
-  updateStatus(
-    @Param('id') id: string,
-    @Body() body: UpdateTicketStatusRequest,
-  ): TicketDto {
+  @ApiBadRequestResponse({ type: ErrorResponseDto })
+  @ApiNotFoundResponse({ type: ErrorResponseDto })
+  updateStatus(@Param('id') id: string, @Body() body: UpdateTicketStatusRequest): TicketDto {
     return this.ticketsService.updateTicketStatus(id, body.status);
   }
 
@@ -78,6 +80,8 @@ export class TicketsController {
   @ApiParam({ name: 'id', description: 'Ticket id.' })
   @ApiBody({ type: AssignTicketRequest })
   @ApiOkResponse({ description: 'Assign ticket.' })
+  @ApiBadRequestResponse({ type: ErrorResponseDto })
+  @ApiNotFoundResponse({ type: ErrorResponseDto })
   async assignTicket(
     @Param('id') id: string,
     @Body() body: AssignTicketRequest,

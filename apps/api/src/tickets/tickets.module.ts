@@ -9,14 +9,7 @@ import { TicketsController } from './tickets.controller';
 import { TicketsService } from './tickets.service';
 
 @Module({
-  imports: [
-    AuditModule,
-    NotificationsModule,
-    SlaModule,
-    UsersModule,
-    RealtimeModule,
-    AuthModule,
-  ],
+  imports: [AuditModule, NotificationsModule, SlaModule, UsersModule, RealtimeModule, AuthModule],
   controllers: [TicketsController],
   providers: [TicketsService],
   exports: [TicketsService],

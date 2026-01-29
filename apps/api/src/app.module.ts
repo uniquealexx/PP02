@@ -11,6 +11,10 @@ import { CommentsModule } from './comments/comments.module';
 import { SlaModule } from './sla/sla.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { DebugModule } from './debug/debug.module';
+
+const enableDebugEndpoints =
+  process.env.NODE_ENV !== 'production' || process.env.DEBUG_ENDPOINTS === 'true';
 
 @Module({
   imports: [
@@ -24,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     CommentsModule,
     SlaModule,
     RealtimeModule,
+    ...(enableDebugEndpoints ? [DebugModule] : []),
   ],
   controllers: [AppController],
   providers: [AppService],

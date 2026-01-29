@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import type { AuthUserDto, UserRole } from '@servicedesk/shared';
+import type { UserRole } from '@servicedesk/shared';
 import { ROLES_KEY } from './roles.decorator';
 import type { AuthenticatedRequest } from './jwt-auth.guard';
 
@@ -17,7 +17,7 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
-    const user = request.user as AuthUserDto | undefined;
+    const user = request.user;
     if (!user) {
       throw new ForbiddenException();
     }

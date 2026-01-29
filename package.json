@@ -8,6 +8,40 @@
   "scripts": {
     "dev:web": "bun run --cwd apps/web dev",
     "dev:api": "bun run --cwd apps/api start:dev",
-    "build:shared": "bun run --cwd packages/shared build"
+    "dev:api:debug": "bun run --cwd apps/api start:debug",
+    "dev": "concurrently -k \"bun run dev:api\" \"bun run dev:web\"",
+    "build:shared": "bun run --cwd packages/shared build",
+    "build": "bun run build:shared && bun run --cwd apps/api build && bun run --cwd apps/web build",
+    "lint:api": "bun run --cwd apps/api lint",
+    "lint:web": "bun run --cwd apps/web lint",
+    "lint": "bun run lint:api && bun run lint:web",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck:shared": "bun run --cwd packages/shared typecheck",
+    "typecheck:api": "bun run --cwd apps/api typecheck",
+    "typecheck:web": "bun run --cwd apps/web typecheck",
+    "typecheck": "bun run typecheck:shared && bun run typecheck:api && bun run typecheck:web",
+    "lint-staged": "lint-staged",
+    "prepare": "husky install",
+    "test:api": "bun run --cwd apps/api test && bun run --cwd apps/api test:e2e",
+    "test": "bun run test:api",
+    "smoke": "bun run format:check && bun run lint && bun run test && bun run build:shared"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.4.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss,md,yml,yaml}": [
+      "prettier --write"
+    ],
+    "apps/web/**/*.{js,jsx,ts,tsx}": [
+      "bun run --cwd apps/web lint --"
+    ],
+    "apps/api/**/*.{js,ts}": [
+      "bun run --cwd apps/api lint --"
+    ]
   }
 }

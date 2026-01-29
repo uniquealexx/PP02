@@ -47,9 +47,7 @@ export class TicketsService implements OnModuleInit {
     }
     return tickets.filter(
       (ticket) =>
-        ticket.creatorId === user.id ||
-        ticket.assigneeId === user.id ||
-        !ticket.assigneeId,
+        ticket.creatorId === user.id || ticket.assigneeId === user.id || !ticket.assigneeId,
     );
   }
 
@@ -128,6 +126,17 @@ export class TicketsService implements OnModuleInit {
 
   checkSlaBreaches(): void {
     this.slaService.checkBreaches(this.tickets);
+  }
+
+  reset(): void {
+    this.tickets.length = 0;
+  }
+
+  stopSlaMonitor(): void {
+    if (this.slaInterval) {
+      clearInterval(this.slaInterval);
+      this.slaInterval = undefined;
+    }
   }
 
   onModuleInit(): void {

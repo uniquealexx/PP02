@@ -8,24 +8,33 @@ import type { RealtimeService } from '../realtime/realtime.service';
 
 describe('CommentsService', () => {
   it('adds comment, increments commentsCount, and logs audit/notifications', () => {
+    const logTicketCreated = jest.fn();
+    const logCommentAdded = jest.fn();
     const auditService = {
-      logTicketCreated: jest.fn(),
-      logCommentAdded: jest.fn(),
+      logTicketCreated,
+      logCommentAdded,
     } as unknown as AuditService;
+    const notifyTicketCreated = jest.fn();
+    const notifyCommentAdded = jest.fn();
     const notificationsService = {
-      notifyTicketCreated: jest.fn(),
-      notifyCommentAdded: jest.fn(),
+      notifyTicketCreated,
+      notifyCommentAdded,
     } as unknown as NotificationsService;
+    const createTicketSla = jest.fn();
     const slaService = {
-      createTicketSla: jest.fn(),
+      createTicketSla,
     } as unknown as SlaService;
+    const getUserById = jest.fn();
     const usersService = {
-      getUserById: jest.fn(),
+      getUserById,
     } as unknown as UsersService;
+    const emitTicketCreated = jest.fn();
+    const emitTicketUpdated = jest.fn();
+    const emitCommentAdded = jest.fn();
     const realtimeService = {
-      emitTicketCreated: jest.fn(),
-      emitTicketUpdated: jest.fn(),
-      emitCommentAdded: jest.fn(),
+      emitTicketCreated,
+      emitTicketUpdated,
+      emitCommentAdded,
     } as unknown as RealtimeService;
 
     const ticketsService = new TicketsService(
@@ -48,14 +57,8 @@ describe('CommentsService', () => {
     });
 
     expect(ticketsService.getTicketById(ticket.id).commentsCount).toBe(1);
-    expect(auditService.logCommentAdded).toHaveBeenCalledWith(
-      ticket.id,
-      comment.id,
-    );
-    expect(notificationsService.notifyCommentAdded).toHaveBeenCalledWith(
-      ticket.id,
-      comment.id,
-    );
-    expect(realtimeService.emitCommentAdded).toHaveBeenCalledWith(comment);
+    expect(logCommentAdded).toHaveBeenCalledWith(ticket.id, comment.id);
+    expect(notifyCommentAdded).toHaveBeenCalledWith(ticket.id, comment.id);
+    expect(emitCommentAdded).toHaveBeenCalledWith(comment);
   });
 });

@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+**/build
+**/.next
+**/coverage
+**/out
+**/.turbo
+**/.cache
+**/.husky
+**/prisma
+**/dev.db
+**/*.min.*
